@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How It Works — Die Hard Shield</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .page-container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 32px 60px;
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+      font-size: 15px;
+      color: var(--color-text-light);
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    .flow-card {
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 32px;
+      margin-bottom: 28px;
+      border-left: 5px solid var(--color-unknown);
+      transition: box-shadow 0.2s;
+    }
+
+    .flow-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .flow-card.flow-whitelisted { border-left-color: var(--color-allowed); }
+    .flow-card.flow-blacklisted { border-left-color: var(--color-blocked); }
+    .flow-card.flow-unknown { border-left-color: var(--color-primary); }
+
+    .flow-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .flow-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .flow-whitelisted .flow-icon { background: var(--color-allowed-bg); }
+    .flow-blacklisted .flow-icon { background: var(--color-blocked-bg); }
+    .flow-unknown .flow-icon { background: var(--color-warning-bg); }
+
+    .flow-header h2 {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .flow-header .flow-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    .flow-whitelisted .flow-badge { background: var(--color-allowed-bg); color: var(--color-allowed); }
+    .flow-blacklisted .flow-badge { background: var(--color-blocked-bg); color: var(--color-blocked); }
+    .flow-unknown .flow-badge { background: var(--color-warning-bg); color: #b45309; }
+
+    .flow-steps {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 24px 0;
+    }
+
+    .flow-steps li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--color-border);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .flow-steps li:last-child { border-bottom: none; }
+
+    .step-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--color-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--color-text-light);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .flow-whitelisted .step-number { color: var(--color-allowed); }
+    .flow-blacklisted .step-number { color: var(--color-blocked); }
+    .flow-unknown .step-number { color: #b45309; }
+
+    .step-text strong {
+      font-weight: 700;
+    }
+
+    .flow-diagram {
+      background: var(--color-bg-dark);
+      color: #e5e7eb;
+      border-radius: var(--radius-sm);
+      padding: 20px 24px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .flow-diagram .highlight-green { color: #4caf50; font-weight: 700; }
+    .flow-diagram .highlight-red { color: #ef5350; font-weight: 700; }
+    .flow-diagram .highlight-yellow { color: var(--color-primary); font-weight: 700; }
+    .flow-diagram .highlight-dim { color: #6b7280; }
+
+    .overview-section {
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 32px;
+      margin-bottom: 36px;
+    }
+
+    .overview-section h3 {
+      margin-bottom: 16px;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .overview-item {
+      text-align: center;
+      padding: 20px 16px;
+      background: var(--color-bg);
+      border-radius: var(--radius-sm);
+    }
+
+    .overview-item .ov-icon { font-size: 28px; margin-bottom: 8px; }
+    .overview-item .ov-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--color-text-light);
+      margin-bottom: 4px;
+    }
+    .overview-item .ov-desc {
+      font-size: 13px;
+      color: var(--color-text);
+      font-weight: 600;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 24px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text-light);
+      text-decoration: none;
+      letter-spacing: 0.3px;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--color-text); }
+
+    @media (max-width: 768px) {
+      .page-container { padding: 24px 16px 40px; }
+      .page-title { font-size: 22px; }
+      .flow-card { padding: 24px 20px; }
+      .overview-grid { grid-template-columns: 1fr; }
+      .flow-diagram { font-size: 11px; padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div class="brand">
+        <img src="/img/advance-logo-light.png" alt="Advance Auto Parts" class="brand-logo">
+        <div class="brand-text">
+          <h1>DIE HARD <span class="brand-accent">SHIELD</span></h1>
+          <span class="subtitle">Call Protection System — Advance Auto Parts</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-accent"></div>
+  </header>
+
+  <div class="page-container">
+
+    <a href="/" class="back-link">&larr; Back to Dashboard</a>
+
+    <h1 class="page-title">How It Works</h1>
+    <p class="page-subtitle">
+      Die Hard Shield protects Advance Auto Parts store phone lines by intelligently routing every inbound call through one of three paths based on the caller's history.
+    </p>
+
+    <!-- Overview -->
+    <div class="overview-section">
+      <h3>Call Routing at a Glance</h3>
+      <div class="overview-grid">
+        <div class="overview-item">
+          <div class="ov-icon" style="color: var(--color-allowed);">&#x2705;</div>
+          <div class="ov-label">Whitelisted</div>
+          <div class="ov-desc">Silent transfer to store</div>
+        </div>
+        <div class="overview-item">
+          <div class="ov-icon" style="color: var(--color-blocked);">&#x1F6AB;</div>
+          <div class="ov-label">Blacklisted</div>
+          <div class="ov-desc">AI answers, never transfers</div>
+        </div>
+        <div class="overview-item">
+          <div class="ov-icon" style="color: var(--color-warning);">&#x1F50D;</div>
+          <div class="ov-label">Unknown</div>
+          <div class="ov-desc">AI screens, then decides</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Whitelisted Flow -->
+    <div class="flow-card flow-whitelisted">
+      <div class="flow-header">
+        <div class="flow-icon">&#x2705;</div>
+        <div>
+          <h2>Whitelisted Callers</h2>
+          <span class="flow-badge">Always Connected</span>
+        </div>
+      </div>
+
+      <ol class="flow-steps">
+        <li>
+          <span class="step-number">1</span>
+          <span class="step-text"><strong>Inbound call arrives</strong> — A customer calls the store's protected phone number. Retell AI receives the call and sends a webhook to our server.</span>
+        </li>
+        <li>
+          <span class="step-number">2</span>
+          <span class="step-text"><strong>Caller identified</strong> — The system looks up the caller's phone number and finds it on the <strong>whitelist</strong>. The call is classified as trusted.</span>
+        </li>
+        <li>
+          <span class="step-number">3</span>
+          <span class="step-text"><strong>Routed to Store Assistant</strong> — The call is handed off to the Store Assistant voice agent, which is configured for silent operation.</span>
+        </li>
+        <li>
+          <span class="step-number">4</span>
+          <span class="step-text"><strong>Silent transfer</strong> — The assistant immediately transfers the call to the store's real landline with <strong>no AI speech</strong>. The caller never hears the AI — the experience is seamless, as if the shield doesn't exist.</span>
+        </li>
+      </ol>
+
+      <div class="flow-diagram"><span class="highlight-dim">Incoming Call</span>
+    <span class="highlight-dim">|</span>
+    <span class="highlight-dim">v</span>
+<span class="highlight-dim">Webhook</span> ──> <span class="highlight-dim">Lookup phone_lists</span> ──> <span class="highlight-green">Whitelist Match</span>
+                                        <span class="highlight-dim">|</span>
+                                        <span class="highlight-dim">v</span>
+                                 <span class="highlight-green">Store Assistant</span>
+                                        <span class="highlight-dim">|</span>
+                                        <span class="highlight-dim">v</span>
+                              <span class="highlight-green">Silent Transfer to Store</span>
+                                        <span class="highlight-dim">|</span>
+                                        <span class="highlight-dim">v</span>
+                           <span class="highlight-green">Caller is talking to the store</span></div>
+
+      <p style="margin-top: 16px; font-size: 13px; color: var(--color-text-light);">
+        <strong>How numbers get whitelisted:</strong> Manually via the dashboard, or automatically after passing the unknown caller screening process.
+      </p>
+    </div>
+
+    <!-- Blacklisted Flow -->
+    <div class="flow-card flow-blacklisted">
+      <div class="flow-header">
+        <div class="flow-icon">&#x1F6AB;</div>
+        <div>
+          <h2>Blacklisted Callers</h2>
+          <span class="flow-badge">Always Blocked</span>
+        </div>
+      </div>
+
+      <ol class="flow-steps">
+        <li>
+          <span class="step-number">1</span>
+          <span class="step-text"><strong>Inbound call arrives</strong> — A caller dials the store's protected number. Retell AI receives the call and notifies our server.</span>
+        </li>
+        <li>
+          <span class="step-number">2</span>
+          <span class="step-text"><strong>Caller identified</strong> — The system finds the number on the <strong>blacklist</strong>. The call is classified as blocked.</span>
+        </li>
+        <li>
+          <span class="step-number">3</span>
+          <span class="step-text"><strong>Routed to Call Blocked agent</strong> — The caller is connected to an AI voice agent that greets them naturally: <em>"Thank you for calling Advance Auto Parts. How may I help you?"</em></span>
+        </li>
+        <li>
+          <span class="step-number">4</span>
+          <span class="step-text"><strong>AI assists but never transfers</strong> — The agent answers store questions (hours, address, parts availability) but has <strong>no transfer capability</strong>. If the caller asks to speak with someone, they are directed to email <strong>shield@diespam.com</strong>.</span>
+        </li>
+      </ol>
+
+      <div class="flow-diagram"><span class="highlight-dim">Incoming Call</span>
+    <span class="highlight-dim">|</span>
+    <span class="highlight-dim">v</span>
+<span class="highlight-dim">Webhook</span> ──> <span class="highlight-dim">Lookup phone_lists</span> ──> <span class="highlight-red">Blacklist Match</span>
+                                        <span class="highlight-dim">|</span>
+                                        <span class="highlight-dim">v</span>
+                                  <span class="highlight-red">Call Blocked Agent</span>
+                                        <span class="highlight-dim">|</span>
+                              <span class="highlight-dim">+-------------------+</span>
+                              <span class="highlight-dim">|</span>                   <span class="highlight-dim">|</span>
+                              <span class="highlight-dim">v</span>                   <span class="highlight-dim">v</span>
+                     <span class="highlight-dim">Asks about store</span>    <span class="highlight-dim">Asks to transfer</span>
+                              <span class="highlight-dim">|</span>                   <span class="highlight-dim">|</span>
+                              <span class="highlight-dim">v</span>                   <span class="highlight-dim">v</span>
+                       <span class="highlight-red">AI answers</span>      <span class="highlight-red">"Email shield@diespam.com"</span>
+                              <span class="highlight-dim">|</span>                   <span class="highlight-dim">|</span>
+                              <span class="highlight-dim">+-------------------+</span>
+                                        <span class="highlight-dim">|</span>
+                                        <span class="highlight-dim">v</span>
+                              <span class="highlight-red">Caller never reaches store</span></div>
+
+      <p style="margin-top: 16px; font-size: 13px; color: var(--color-text-light);">
+        <strong>How numbers get blacklisted:</strong> Manually only — there is no automatic blacklisting. Blocking a caller is always a deliberate decision.
+      </p>
+    </div>
+
+    <!-- Unknown Flow -->
+    <div class="flow-card flow-unknown">
+      <div class="flow-header">
+        <div class="flow-icon">&#x1F50D;</div>
+        <div>
+          <h2>Unknown Callers</h2>
+          <span class="flow-badge">Screened by AI</span>
+        </div>
+      </div>
+
+      <ol class="flow-steps">
+        <li>
+          <span class="step-number">1</span>
+          <span class="step-text"><strong>Inbound call arrives</strong> — A first-time caller dials the store. The system has no prior record of this number.</span>
+        </li>
+        <li>
+          <span class="step-number">2</span>
+          <span class="step-text"><strong>No match found</strong> — The phone number is not on the whitelist or blacklist. The call is classified as <strong>unknown</strong> and requires screening.</span>
+        </li>
+        <li>
+          <span class="step-number">3</span>
+          <span class="step-text"><strong>Routed to Call Screener</strong> — The AI greets the caller: <em>"Thank you for calling Advance Auto Parts. How may I help you?"</em> and begins evaluating the interaction.</span>
+        </li>
+        <li>
+          <span class="step-number">4a</span>
+          <span class="step-text"><strong>Human detected</strong> — If the caller engages naturally (asks about parts, hours, etc.), the AI transfers them to the real store and <strong>automatically whitelists</strong> their number for future calls.</span>
+        </li>
+        <li>
+          <span class="step-number">4b</span>
+          <span class="step-text"><strong>Bot detected</strong> — If the caller is silent, plays a recorded message, or behaves like a robocall, the AI <strong>hangs up</strong>. The number is not whitelisted.</span>
+        </li>
+      </ol>
+
+      <div class="flow-diagram"><span class="highlight-dim">Incoming Call</span>
+    <span class="highlight-dim">|</span>
+    <span class="highlight-dim">v</span>
+<span class="highlight-dim">Webhook</span> ──> <span class="highlight-dim">Lookup phone_lists</span> ──> <span class="highlight-yellow">No Match (Unknown)</span>
+                                        <span class="highlight-dim">|</span>
+                                        <span class="highlight-dim">v</span>
+                                  <span class="highlight-yellow">Call Screener Agent</span>
+                                  <span class="highlight-dim">"How may I help you?"</span>
+                                        <span class="highlight-dim">|</span>
+                              <span class="highlight-dim">+-------------------+</span>
+                              <span class="highlight-dim">|</span>                   <span class="highlight-dim">|</span>
+                              <span class="highlight-dim">v</span>                   <span class="highlight-dim">v</span>
+                     <span class="highlight-green">Human engagement</span>    <span class="highlight-red">Bot / Silence</span>
+                              <span class="highlight-dim">|</span>                   <span class="highlight-dim">|</span>
+                              <span class="highlight-dim">v</span>                   <span class="highlight-dim">v</span>
+                    <span class="highlight-green">Transfer to store</span>     <span class="highlight-red">Hang up</span>
+                              <span class="highlight-dim">|</span>
+                              <span class="highlight-dim">v</span>
+                    <span class="highlight-green">Auto-whitelist</span>
+                    <span class="highlight-dim">(next call skips screening)</span></div>
+
+      <p style="margin-top: 16px; font-size: 13px; color: var(--color-text-light);">
+        <strong>Auto-whitelist triggers:</strong> The caller's number is automatically added to the whitelist if they are transferred to the store, or if they engage with the AI for 15 seconds or more without being flagged as a bot.
+      </p>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>Powered by <strong>Nucleus Technologies</strong></span>
+  </footer>
+</body>
+</html>
