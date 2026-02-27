@@ -114,25 +114,61 @@ router.post('/retell-inbound', async (req, res) => {
   }
 });
 
-// POST /webhook/retell-call-ended — called by Retell when a call ends
+// POST /webhook/retell-call-ended — called by Retell for call_started, call_ended, call_analyzed
 router.post('/retell-call-ended', async (req, res) => {
   try {
     console.log('Retell call-ended webhook:', JSON.stringify(req.body));
 
     const { event, call } = req.body;
 
-    if (!['call_ended', 'call_analyzed'].includes(event) || !call) {
+    if (!call) {
       return res.json({ ok: true });
     }
 
     const { call_id, from_number, agent_id, duration_ms, disconnection_reason } = call;
+
+    // Handle call_started: backfill retell_call_id on the call record
+    if (event === 'call_started' && call_id && from_number) {
+      const formattedFrom = toFormatted(from_number);
+      const updated = await pool.query(
+        `UPDATE calls SET retell_call_id = $1
+         WHERE from_number = $2 AND retell_call_id IS NULL AND is_simulated = FALSE
+         AND created_at > NOW() - INTERVAL '5 minutes'
+         ORDER BY created_at DESC LIMIT 1
+         RETURNING id`,
+        [call_id, formattedFrom]
+      );
+      if (updated.rows.length > 0) {
+        console.log(`Backfilled retell_call_id ${call_id} for ${formattedFrom}`);
+      }
+      return res.json({ ok: true });
+    }
+
+    if (!['call_ended', 'call_analyzed'].includes(event)) {
+      return res.json({ ok: true });
+    }
+
     const durationSeconds = duration_ms ? Math.round(duration_ms / 1000) : null;
 
-    // Find the call record by retell_call_id
-    const callResult = await pool.query(
+    // Find the call record by retell_call_id, or fall back to from_number + recent timestamp
+    let callResult = await pool.query(
       'SELECT * FROM calls WHERE retell_call_id = $1',
       [call_id]
     );
+
+    if (callResult.rows.length === 0 && from_number) {
+      const formattedFrom = toFormatted(from_number);
+      callResult = await pool.query(
+        `SELECT * FROM calls WHERE from_number = $1 AND is_simulated = FALSE
+         AND created_at > NOW() - INTERVAL '10 minutes'
+         ORDER BY created_at DESC LIMIT 1`,
+        [formattedFrom]
+      );
+      if (callResult.rows.length > 0) {
+        await pool.query('UPDATE calls SET retell_call_id = $1 WHERE id = $2', [call_id, callResult.rows[0].id]);
+        console.log(`Matched call by from_number ${formattedFrom}, backfilled retell_call_id ${call_id}`);
+      }
+    }
 
     if (callResult.rows.length === 0) {
       console.log(`No call record found for retell_call_id: ${call_id}`);
