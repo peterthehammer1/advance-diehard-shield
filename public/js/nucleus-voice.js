@@ -48,7 +48,7 @@ const NucleusVoice = {
           <h4>${info.label}</h4>
           <div class="profile-phone">${agent.agent_type}</div>
           <div class="profile-traits">${info.desc}</div>
-          <div class="profile-traits" style="font-family: monospace; font-size: 11px;">ID: ${agent.retell_agent_id}</div>
+          <div class="profile-traits" style="font-family: monospace; font-size: 11px;">ID: ${agent.retell_agent_id || 'N/A'}</div>
         </div>
       `;
     }).join('');
