@@ -508,6 +508,39 @@ header {
   border-color: var(--color-blocked);
 }
 
+.list-entry-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.btn-move {
+  padding: 6px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: white;
+  color: var(--color-text-light);
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+}
+
+.btn-move-whitelist:hover {
+  background: var(--color-allowed);
+  color: white;
+  border-color: var(--color-allowed);
+}
+
+.btn-move-blacklist:hover {
+  background: var(--color-blocked);
+  color: white;
+  border-color: var(--color-blocked);
+}
+
 /* ===== CALL LOG ===== */
 .log-controls {
   margin-bottom: 16px;

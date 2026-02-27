@@ -66,6 +66,4 @@ psql "postgresql://postgres:UlNkmZODESWGJdzzhOJspNnVoNwlMRpS@crossover.proxy.rlw
 
 ## Known Issues
 - Atlanta, Charlotte, Raleigh need real store landline numbers, addresses, hours
-- `diespam.com` points to old `humorous-mindfulness` Railway project — do not use for webhooks
-- Old Railway project `humorous-mindfulness` should be deleted
 - Auto-whitelist backfill (call_started event) deployed but not fully tested end-to-end

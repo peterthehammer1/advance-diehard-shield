@@ -36,13 +36,27 @@ const PhoneLists = {
   createEntryElement(entry) {
     const el = document.createElement('div');
     el.className = 'list-entry';
+    const targetList = entry.list_type === 'whitelist' ? 'blacklist' : 'whitelist';
+    const moveLabel = entry.list_type === 'whitelist' ? 'Move to Blacklist' : 'Move to Whitelist';
     el.innerHTML = `
       <div class="list-entry-info">
         <span class="list-entry-phone">${entry.phone_number}</span>
         <span class="list-entry-label">${entry.label || 'No label'}</span>
       </div>
-      <button class="btn-remove" data-id="${entry.id}">Remove</button>
+      <div class="list-entry-actions">
+        <button class="btn-move btn-move-${targetList}" data-id="${entry.id}">${moveLabel}</button>
+        <button class="btn-remove" data-id="${entry.id}">Remove</button>
+      </div>
     `;
+
+    el.querySelector('.btn-move').addEventListener('click', async () => {
+      try {
+        await API.put(`/api/phone-lists/${entry.id}`, { list_type: targetList });
+        this.load();
+      } catch (err) {
+        console.error('Failed to move entry:', err);
+      }
+    });
 
     el.querySelector('.btn-remove').addEventListener('click', async () => {
       try {
