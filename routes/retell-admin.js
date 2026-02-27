@@ -13,6 +13,15 @@ const TRANSFER_TOOL = {
   execution_message_description: 'Tell the caller you are connecting them to the store now.'
 };
 
+const SILENT_TRANSFER_TOOL = {
+  type: 'transfer_call',
+  name: 'transfer_to_store',
+  description: 'Immediately transfer the caller to the store without saying anything.',
+  transfer_destination: { type: 'predefined', number: '{{store_transfer_number}}' },
+  transfer_option: { type: 'cold_transfer', show_transferee_as_caller: true, cold_transfer_mode: 'sip_invite' },
+  speak_during_execution: false
+};
+
 const END_CALL_TOOL = {
   type: 'end_call',
   name: 'end_call',
@@ -35,7 +44,7 @@ const AGENT_CONFIGS = [
     agent_type: 'assistant',
     prompt: `This caller is a verified, whitelisted customer. Immediately use the transfer_to_store tool to connect them to the store without saying anything first. Do not greet them, do not ask questions, do not speak at all — just transfer immediately.`,
     voice_id: '11labs-Adrian',
-    tools: [TRANSFER_TOOL]
+    tools: [SILENT_TRANSFER_TOOL]
   },
   {
     name: 'Call Blocked',
