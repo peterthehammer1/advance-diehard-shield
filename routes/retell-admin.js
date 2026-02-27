@@ -21,7 +21,7 @@ Keep responses conversational and concise.`,
 "This number has been identified as a suspected spam call and will not be connected. If you believe this is an error, please contact us through our website. Goodbye."
 After saying this message, immediately end the call. Do not engage in further conversation.`,
     voice_id: '11labs-Adrian',
-    end_call_after_silence_ms: 3000
+    end_call_after_silence_ms: 10000
   },
   {
     name: 'Call Screener',
@@ -37,9 +37,9 @@ Keep responses brief and professional.`,
 ];
 
 const STORE_NUMBERS = [
-  { area_code: 404, nickname: 'Store #1042 - Atlanta', store_name: 'Atlanta' },
-  { area_code: 704, nickname: 'Store #2187 - Charlotte', store_name: 'Charlotte' },
-  { area_code: 919, nickname: 'Store #0891 - Raleigh', store_name: 'Raleigh' }
+  { area_code: 470, nickname: 'Store #1042 - Atlanta', store_name: 'Atlanta' },
+  { area_code: 980, nickname: 'Store #2187 - Charlotte', store_name: 'Charlotte' },
+  { area_code: 984, nickname: 'Store #0891 - Raleigh', store_name: 'Raleigh' }
 ];
 
 // POST /api/retell/setup — create agents and phone numbers

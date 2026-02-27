@@ -3,13 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Advance SPAM/RoboCall Filter Dashboard</title>
+  <title>Die Hard Shield — Call Protection System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <header>
-    <h1>SPAM/RoboCall Filter Dashboard</h1>
-    <span class="subtitle">Phase 2A — Advance Stores</span>
+    <div class="header-content">
+      <div class="brand">
+        <img src="/img/diehard.svg" alt="DieHard" class="brand-logo">
+        <div class="brand-text">
+          <h1>DIE HARD <span class="brand-accent">SHIELD</span></h1>
+          <span class="subtitle">Call Protection System — Advance Auto Parts</span>
+        </div>
+      </div>
+      <div class="header-badge">LIVE</div>
+    </div>
+    <div class="header-accent"></div>
   </header>
 
   <nav class="tabs">
@@ -17,25 +29,29 @@
     <button class="tab" data-tab="phone-lists">Phone Lists</button>
     <button class="tab" data-tab="call-log">Call Log</button>
     <button class="tab" data-tab="simulation">Simulation</button>
-    <button class="tab" data-tab="nucleus-voice">Nucleus Voice</button>
+    <button class="tab" data-tab="nucleus-voice">Shield Setup</button>
   </nav>
 
   <!-- Dashboard Tab -->
   <section id="tab-dashboard" class="tab-content active">
     <div class="metrics-row">
       <div class="metric-card">
+        <div class="metric-icon">&#x1F4DE;</div>
         <div class="metric-value" id="metric-total">—</div>
         <div class="metric-label">Total Calls</div>
       </div>
       <div class="metric-card metric-blocked">
+        <div class="metric-icon">&#x1F6AB;</div>
         <div class="metric-value" id="metric-blocked">—</div>
         <div class="metric-label">Blocked</div>
       </div>
       <div class="metric-card metric-allowed">
+        <div class="metric-icon">&#x2705;</div>
         <div class="metric-value" id="metric-allowed">—</div>
         <div class="metric-label">Allowed</div>
       </div>
       <div class="metric-card metric-flagged">
+        <div class="metric-icon">&#x26A0;</div>
         <div class="metric-value" id="metric-false-positives">—</div>
         <div class="metric-label">False Positives</div>
       </div>
@@ -55,21 +71,21 @@
   <!-- Phone Lists Tab -->
   <section id="tab-phone-lists" class="tab-content">
     <div class="lists-container">
-      <div class="list-column">
+      <div class="list-column whitelist-column">
         <h3 class="list-header whitelist-header">Whitelist (Always Allow)</h3>
         <form id="whitelist-form" class="add-form">
           <input type="tel" name="phone_number" placeholder="+1-555-0100" required>
           <input type="text" name="label" placeholder="Name / label">
-          <button type="submit">Add</button>
+          <button type="submit" class="btn-add-whitelist">Add to Whitelist</button>
         </form>
         <div id="whitelist-entries" class="list-entries"></div>
       </div>
-      <div class="list-column">
+      <div class="list-column blacklist-column">
         <h3 class="list-header blacklist-header">Blacklist (Always Block)</h3>
         <form id="blacklist-form" class="add-form">
           <input type="tel" name="phone_number" placeholder="+1-555-0200" required>
           <input type="text" name="label" placeholder="Name / label">
-          <button type="submit">Add</button>
+          <button type="submit" class="btn-add-blacklist">Add to Blacklist</button>
         </form>
         <div id="blacklist-entries" class="list-entries"></div>
       </div>
@@ -122,39 +138,43 @@
       </div>
     </div>
     <h3>Demo Profiles</h3>
-    <p class="sim-description">Trigger individual calls from each persona to see how the filter handles them.</p>
+    <p class="sim-description">Trigger individual calls from each persona to see how the shield handles them.</p>
     <div id="sim-profiles" class="profiles-grid"></div>
   </section>
 
-  <!-- Nucleus Voice Tab -->
+  <!-- Shield Setup Tab -->
   <section id="tab-nucleus-voice" class="tab-content">
     <div class="nucleus-status-bar">
       <div class="nucleus-status-info">
-        <span>API Key: <span id="nv-api-status" class="status-stopped">Not configured</span></span>
-        <span>Webhook URL: <span id="nv-webhook-url">—</span></span>
+        <span>API Status: <span id="nv-api-status" class="status-stopped">Not configured</span></span>
+        <span>Webhook: <span id="nv-webhook-url">—</span></span>
       </div>
     </div>
 
     <div class="nucleus-setup-section">
-      <h3>Setup</h3>
-      <p class="sim-description">Create the Nucleus voice agents and provision phone numbers for each store location. This only needs to be done once.</p>
+      <h3>Shield Configuration</h3>
+      <p class="sim-description">Deploy Die Hard Shield voice agents and provision phone numbers for each store location. This only needs to be done once.</p>
       <div class="nucleus-setup-buttons">
-        <button id="nv-setup" class="btn-start">Run Setup</button>
+        <button id="nv-setup" class="btn-start">Deploy Shield</button>
         <button id="nv-teardown" class="btn-stop">Teardown All</button>
       </div>
     </div>
 
     <div class="nucleus-agents-section">
-      <h3>Voice Agents</h3>
+      <h3>Shield Agents</h3>
       <div id="nv-agents" class="profiles-grid"></div>
     </div>
 
     <div class="nucleus-numbers-section">
-      <h3>Store Phone Numbers</h3>
-      <p class="sim-description">Call these numbers to test the filtering. Whitelisted callers get the store assistant, blacklisted callers hear a blocked message, and unknown callers are screened.</p>
+      <h3>Protected Store Lines</h3>
+      <p class="sim-description">Call these numbers to test Die Hard Shield. Whitelisted callers get the store assistant, blacklisted callers hear a blocked message, and unknown callers are screened.</p>
       <div id="nv-numbers" class="profiles-grid"></div>
     </div>
   </section>
+
+  <footer>
+    <span>Powered by <strong>Nucleus Technologies</strong></span>
+  </footer>
 
   <script src="/js/api.js"></script>
   <script src="/js/dashboard.js"></script>

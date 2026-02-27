@@ -31,7 +31,7 @@ const NucleusVoice = {
     const container = document.getElementById('nv-agents');
 
     if (agents.length === 0) {
-      container.innerHTML = '<div class="empty-message">No agents created yet. Click "Run Setup" to create them.</div>';
+      container.innerHTML = '<div class="empty-message">No shield agents deployed yet. Click "Deploy Shield" to create them.</div>';
       return;
     }
 
@@ -58,7 +58,7 @@ const NucleusVoice = {
     const container = document.getElementById('nv-numbers');
 
     if (numbers.length === 0) {
-      container.innerHTML = '<div class="empty-message">No phone numbers provisioned yet. Click "Run Setup" to provision them.</div>';
+      container.innerHTML = '<div class="empty-message">No store lines provisioned yet. Click "Deploy Shield" to set them up.</div>';
       return;
     }
 
@@ -66,7 +66,7 @@ const NucleusVoice = {
       <div class="profile-card legitimate">
         <h4>${num.nickname || num.store_name}</h4>
         <div class="profile-phone" style="font-size: 18px; font-weight: 700;">${num.phone_number}</div>
-        <div class="profile-traits">Call this number to test the filtering for the ${num.store_name} store location.</div>
+        <div class="profile-traits">Call this number to test Die Hard Shield protection for the ${num.store_name} store.</div>
       </div>
     `).join('');
   },
@@ -74,7 +74,7 @@ const NucleusVoice = {
   init() {
     document.getElementById('nv-setup').addEventListener('click', async () => {
       const btn = document.getElementById('nv-setup');
-      btn.textContent = 'Setting up...';
+      btn.textContent = 'Deploying...';
       btn.disabled = true;
       try {
         const result = await API.post('/api/retell/setup', {});
@@ -84,12 +84,12 @@ const NucleusVoice = {
         console.error('Setup failed:', err);
         alert('Setup failed: ' + err.message);
       }
-      btn.textContent = 'Run Setup';
+      btn.textContent = 'Deploy Shield';
       btn.disabled = false;
     });
 
     document.getElementById('nv-teardown').addEventListener('click', async () => {
-      if (!confirm('This will delete all Nucleus voice agents and phone numbers. Continue?')) return;
+      if (!confirm('This will remove all Die Hard Shield agents and phone numbers. Continue?')) return;
       const btn = document.getElementById('nv-teardown');
       btn.textContent = 'Tearing down...';
       btn.disabled = true;
