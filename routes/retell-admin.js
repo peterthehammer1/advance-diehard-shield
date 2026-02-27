@@ -33,12 +33,7 @@ const AGENT_CONFIGS = [
   {
     name: 'Store Assistant',
     agent_type: 'assistant',
-    prompt: BASE_PROMPT + `
-
-The caller is a verified customer.
-If the caller asks to speak with someone at the store, to be connected, or transferred, immediately say "Let me connect you to the store" and use the transfer_to_store tool.
-If you cannot answer a question, say "Let me connect you to someone at the store who can help" and use the transfer_to_store tool.
-Do not give long explanations before transferring — just connect them quickly.`,
+    prompt: `This caller is a verified, whitelisted customer. Immediately use the transfer_to_store tool to connect them to the store without saying anything first. Do not greet them, do not ask questions, do not speak at all — just transfer immediately.`,
     voice_id: '11labs-Adrian',
     tools: [TRANSFER_TOOL]
   },
