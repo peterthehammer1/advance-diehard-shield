@@ -27,7 +27,7 @@ async function retellFetch(path, options = {}) {
 
 // --- Agents ---
 
-async function createAgent({ name, prompt, voice_id, end_call_after_silence_ms }) {
+async function createAgent({ name, prompt, voice_id, end_call_after_silence_ms, webhook_url }) {
   // First create an LLM with the prompt
   const llm = await retellFetch('/create-retell-llm', {
     method: 'POST',
@@ -52,7 +52,8 @@ async function createAgent({ name, prompt, voice_id, end_call_after_silence_ms }
       agent_name: name,
       voice_id: voice_id || '11labs-Adrian',
       voice_speed: 1.0,
-      end_call_after_silence_ms: end_call_after_silence_ms || 600000
+      end_call_after_silence_ms: end_call_after_silence_ms || 600000,
+      webhook_url: webhook_url || null
     })
   });
 

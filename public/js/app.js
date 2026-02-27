@@ -26,8 +26,17 @@ document.querySelectorAll('.tab').forEach(tab => {
 const eventSource = new EventSource('/api/calls/stream');
 eventSource.onmessage = (event) => {
   try {
-    const call = JSON.parse(event.data);
-    Dashboard.addToFeed(call);
+    const data = JSON.parse(event.data);
+
+    // Handle auto-whitelist SSE events
+    if (data.type === 'auto_whitelisted') {
+      Dashboard.loadAutoWhitelisted();
+      PhoneLists.load();
+      return;
+    }
+
+    // Regular call event
+    Dashboard.addToFeed(data);
 
     // If call log tab is active, refresh it
     if (document.getElementById('tab-call-log').classList.contains('active')) {
@@ -55,3 +64,4 @@ NucleusVoice.init();
 
 // Load initial data
 Dashboard.loadMetrics();
+Dashboard.loadAutoWhitelisted();

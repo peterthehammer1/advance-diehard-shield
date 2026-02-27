@@ -43,6 +43,34 @@ const Dashboard = {
     }
   },
 
+  async loadAutoWhitelisted() {
+    try {
+      const rows = await API.get('/api/calls/auto-whitelisted');
+      const container = document.getElementById('auto-whitelist-feed');
+      if (rows.length === 0) {
+        container.innerHTML = '<div class="empty-message">No numbers auto-whitelisted yet</div>';
+        return;
+      }
+      container.innerHTML = '';
+      rows.forEach(row => {
+        const el = document.createElement('div');
+        el.className = 'feed-item';
+        const time = new Date(row.whitelisted_at).toLocaleTimeString();
+        const dur = row.duration_seconds ? `${row.duration_seconds}s` : '';
+        el.innerHTML = `
+          <span class="feed-time">${time}</span>
+          <span class="badge badge-whitelisted">whitelisted</span>
+          <span class="feed-number">${row.from_number}</span>
+          <span class="feed-label">${row.to_store}</span>
+          <span class="feed-reason">Passed screening${dur ? ' (' + dur + ')' : ''}</span>
+        `;
+        container.appendChild(el);
+      });
+    } catch (err) {
+      console.error('Failed to load auto-whitelisted:', err);
+    }
+  },
+
   addToFeed(call) {
     const feed = document.getElementById('live-feed');
     const time = new Date(call.created_at).toLocaleTimeString();

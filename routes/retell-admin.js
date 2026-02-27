@@ -69,7 +69,8 @@ router.post('/setup', async (req, res) => {
         name: config.name,
         prompt: config.prompt,
         voice_id: config.voice_id,
-        end_call_after_silence_ms: config.end_call_after_silence_ms
+        end_call_after_silence_ms: config.end_call_after_silence_ms,
+        webhook_url: `${webhookUrl}/webhook/retell-call-ended`
       });
 
       const { rows } = await pool.query(

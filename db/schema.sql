@@ -25,12 +25,15 @@ CREATE TABLE IF NOT EXISTS calls (
   flagged_false_positive BOOLEAN DEFAULT FALSE,
   flagged_false_negative BOOLEAN DEFAULT FALSE,
   reviewed BOOLEAN DEFAULT FALSE,
+  retell_call_id VARCHAR(100),
+  auto_whitelisted BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 CREATE INDEX IF NOT EXISTS idx_calls_created_at ON calls(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_calls_from_number ON calls(from_number);
 CREATE INDEX IF NOT EXISTS idx_calls_classification ON calls(classification);
+CREATE INDEX IF NOT EXISTS idx_calls_retell_call_id ON calls(retell_call_id);
 
 CREATE TABLE IF NOT EXISTS classification_rules (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

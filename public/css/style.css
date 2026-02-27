@@ -60,9 +60,8 @@ header {
 }
 
 .brand-logo {
-  height: 28px;
+  height: 32px;
   width: auto;
-  filter: brightness(0) invert(1);
 }
 
 .brand-text h1 {
@@ -326,6 +325,38 @@ header {
   font-size: 12px;
   color: var(--color-text-light);
   flex: 1;
+}
+
+/* ===== AUTO-WHITELIST SECTION ===== */
+.auto-whitelist-section {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  margin-top: 28px;
+  border-top: 3px solid var(--color-whitelist);
+}
+
+.auto-whitelist-section h3 {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--color-text);
+  margin-bottom: 20px;
+}
+
+.section-note {
+  font-weight: 500;
+  color: var(--color-text-light);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 12px;
+}
+
+.auto-whitelist-feed {
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 /* ===== BADGES ===== */

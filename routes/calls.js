@@ -2,6 +2,27 @@ const express = require('express');
 const router = express.Router();
 const { pool } = require('../db/init');
 
+// GET recently auto-whitelisted callers
+router.get('/auto-whitelisted', async (req, res) => {
+  try {
+    const { rows } = await pool.query(`
+      SELECT c.from_number, c.to_store, c.duration_seconds, c.created_at,
+             pl.label, pl.created_at AS whitelisted_at
+      FROM calls c
+      JOIN phone_lists pl
+        ON REPLACE(REPLACE(REPLACE(pl.phone_number, '-', ''), '+', ''), ' ', '')
+         = REPLACE(REPLACE(REPLACE(c.from_number, '-', ''), '+', ''), ' ', '')
+      WHERE c.auto_whitelisted = TRUE
+      ORDER BY c.created_at DESC
+      LIMIT 20
+    `);
+    res.json(rows);
+  } catch (err) {
+    console.error('Error fetching auto-whitelisted:', err);
+    res.status(500).json({ error: 'Failed to fetch auto-whitelisted calls' });
+  }
+});
+
 // GET paginated call log
 router.get('/', async (req, res) => {
   try {
