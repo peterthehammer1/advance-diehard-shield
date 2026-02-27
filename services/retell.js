@@ -64,6 +64,13 @@ async function listAgents() {
   return retellFetch('/list-agents');
 }
 
+async function updateAgent(agentId, updates) {
+  return retellFetch(`/update-agent/${agentId}`, {
+    method: 'PATCH',
+    body: JSON.stringify(updates)
+  });
+}
+
 async function deleteAgent(agentId) {
   return retellFetch(`/delete-agent/${agentId}`, { method: 'DELETE' });
 }
@@ -135,6 +142,7 @@ function toFormatted(phone) {
 module.exports = {
   createAgent,
   getAgent,
+  updateAgent,
   listAgents,
   deleteAgent,
   deleteLlm,

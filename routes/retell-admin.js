@@ -49,6 +49,7 @@ const AGENT_CONFIGS = [
   {
     name: 'Call Blocked',
     agent_type: 'blocked',
+    end_call_after_silence_ms: 5000,
     prompt: BASE_PROMPT + `
 
 IMPORTANT: You must NEVER transfer or connect this caller to a live agent or the store under any circumstances.
@@ -61,6 +62,7 @@ If you cannot answer a question, do your best with the information available but
   {
     name: 'Call Screener',
     agent_type: 'screening',
+    end_call_after_silence_ms: 5000,
     prompt: BASE_PROMPT + `
 
 This caller's number is not yet recognized. Pay attention to whether they are a real person or an automated call.
@@ -193,6 +195,14 @@ router.post('/update-agents', async (req, res) => {
         prompt: config.prompt,
         tools: config.tools || []
       });
+
+      // Update agent-level settings (e.g. silence timeout)
+      const { retell_agent_id } = existing.rows[0];
+      if (retell_agent_id && config.end_call_after_silence_ms) {
+        await retell.updateAgent(retell_agent_id, {
+          end_call_after_silence_ms: config.end_call_after_silence_ms
+        });
+      }
 
       results.push({ agent_type: config.agent_type, status: 'updated', llm_id: retell_llm_id });
     }
