@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { pool } = require('../db/init');
+const { toFormatted } = require('../services/retell');
 
 // GET all entries (optional ?type=whitelist or ?type=blacklist)
 router.get('/', async (req, res) => {
@@ -35,12 +36,14 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'list_type must be whitelist or blacklist' });
     }
 
+    const formatted = toFormatted(phone_number);
+
     const { rows } = await pool.query(
       `INSERT INTO phone_lists (phone_number, list_type, label, notes)
        VALUES ($1, $2, $3, $4)
        ON CONFLICT (phone_number) DO UPDATE SET list_type = $2, label = $3, notes = $4, created_at = NOW()
        RETURNING *`,
-      [phone_number, list_type, label || null, notes || null]
+      [formatted, list_type, label || null, notes || null]
     );
 
     res.status(201).json(rows[0]);
