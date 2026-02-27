@@ -60,8 +60,9 @@ header {
 }
 
 .brand-logo {
-  height: 32px;
+  height: 48px;
   width: auto;
+  border-radius: 4px;
 }
 
 .brand-text h1 {
@@ -870,7 +871,7 @@ footer strong {
   }
 
   .brand-logo {
-    height: 22px;
+    height: 36px;
   }
 
   .brand-text h1 {
