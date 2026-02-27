@@ -28,7 +28,6 @@
     <button class="tab active" data-tab="dashboard">Dashboard</button>
     <button class="tab" data-tab="phone-lists">Phone Lists</button>
     <button class="tab" data-tab="call-log">Call Log</button>
-    <button class="tab" data-tab="simulation">Simulation</button>
     <button class="tab" data-tab="nucleus-voice">Shield Setup</button>
   </nav>
 
@@ -125,8 +124,9 @@
         50% { opacity: 0.5; box-shadow: 0 0 16px var(--ai-accent); }
       }
       .hiw-hero h2 {
-        font-size: 32px; font-weight: 800; color: #ffffff;
+        font-size: 28px; font-weight: 800; color: #ffffff;
         letter-spacing: 1px; margin-bottom: 12px; line-height: 1.2;
+        white-space: nowrap;
       }
       .hiw-hero h2 span {
         background: linear-gradient(90deg, var(--ai-accent), #3664B2);
@@ -303,18 +303,35 @@
       .hiw-cta-powered strong { color: var(--ai-accent); }
 
       @media (max-width: 768px) {
-        .hiw-hero { padding: 36px 20px; }
-        .hiw-hero h2 { font-size: 24px; }
-        .hiw-features { grid-template-columns: repeat(2, 1fr); }
-        .flow-card { padding: 24px 20px; }
-        .flow-branch { gap: 20px; }
-        .flow-node { min-width: 140px; padding: 8px 14px; font-size: 12px; }
-        .hiw-cta { padding: 36px 20px; }
+        .hiw-hero { padding: 36px 16px; }
+        .hiw-hero h2 { font-size: 20px; white-space: normal; }
+        .hiw-hero p { font-size: 13px; }
+        .hiw-features { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .hiw-feature { padding: 16px 12px; }
+        .hiw-section-intro h2 { font-size: 20px; }
+        .hiw-section-intro p { font-size: 13px; }
+        .flow-card { padding: 20px 16px; }
+        .flow-header { flex-wrap: wrap; gap: 10px; }
+        .flow-header h2 { font-size: 16px; }
+        .flow-steps li { font-size: 13px; gap: 10px; }
+        .flow-branch { gap: 16px; }
+        .flow-node { min-width: 120px; padding: 8px 12px; font-size: 11px; }
+        .flow-visual { padding: 16px 0; }
+        .hiw-cta { padding: 32px 16px; }
+        .hiw-cta h3 { font-size: 18px; }
+        .hiw-cta p { font-size: 13px; }
       }
       @media (max-width: 480px) {
         .hiw-features { grid-template-columns: 1fr; }
-        .hiw-hero h2 { font-size: 20px; }
+        .hiw-hero h2 { font-size: 18px; }
+        .hiw-ai-badge { font-size: 10px; padding: 6px 14px; }
         .flow-branch { flex-direction: column; gap: 0; }
+        .flow-node { min-width: 100px; font-size: 10px; padding: 6px 10px; }
+        .flow-header h2 { font-size: 15px; }
+        .flow-steps li { font-size: 12px; }
+        .step-number { width: 24px; height: 24px; font-size: 10px; }
+        .ai-tag { font-size: 8px; padding: 1px 6px; margin-left: 3px; }
+        .flow-note { font-size: 12px; }
       }
     </style>
 
@@ -521,22 +538,6 @@
     </div>
   </section>
 
-  <!-- Simulation Tab -->
-  <section id="tab-simulation" class="tab-content">
-    <div class="sim-controls">
-      <div class="sim-status">
-        Status: <span id="sim-status-text" class="status-stopped">Stopped</span>
-      </div>
-      <div class="sim-buttons">
-        <button id="sim-start" class="btn-start">Start Simulation</button>
-        <button id="sim-stop" class="btn-stop" disabled>Stop Simulation</button>
-      </div>
-    </div>
-    <h3>Demo Profiles</h3>
-    <p class="sim-description">Trigger individual calls from each persona to see how the shield handles them.</p>
-    <div id="sim-profiles" class="profiles-grid"></div>
-  </section>
-
   <!-- Shield Setup Tab -->
   <section id="tab-nucleus-voice" class="tab-content">
     <div class="nucleus-status-bar">
@@ -572,7 +573,6 @@
   <script src="/js/dashboard.js"></script>
   <script src="/js/phone-lists.js"></script>
   <script src="/js/call-log.js"></script>
-  <script src="/js/simulation.js"></script>
   <script src="/js/nucleus-voice.js"></script>
   <script src="/js/app.js"></script>
 </body>
