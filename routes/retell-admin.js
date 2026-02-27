@@ -35,6 +35,7 @@ Store hours: {{store_hours}}
 Always answer the phone with exactly: "Thank you for calling Advance Auto. How may I help you?"
 
 You can answer questions about the store such as hours of operation, location, and directions.
+When sharing the store address, only say the street address and city — do not include the state, zip code, or country.
 You can also help with general automotive parts questions.
 Keep responses conversational, friendly, and concise.`;
 
@@ -49,7 +50,7 @@ const AGENT_CONFIGS = [
   {
     name: 'Call Blocked',
     agent_type: 'blocked',
-    end_call_after_silence_ms: 5000,
+    end_call_after_silence_ms: 10000,
     prompt: BASE_PROMPT + `
 
 IMPORTANT: You must NEVER transfer or connect this caller to a live agent or the store under any circumstances.
@@ -62,7 +63,7 @@ If you cannot answer a question, do your best with the information available but
   {
     name: 'Call Screener',
     agent_type: 'screening',
-    end_call_after_silence_ms: 5000,
+    end_call_after_silence_ms: 10000,
     prompt: BASE_PROMPT + `
 
 This caller's number is not yet recognized. Pay attention to whether they are a real person or an automated call.
