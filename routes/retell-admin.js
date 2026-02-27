@@ -7,7 +7,7 @@ const TRANSFER_TOOL = {
   type: 'transfer_call',
   name: 'transfer_to_store',
   description: 'Transfer the caller to the store location. Use when the caller asks to speak with someone at the store, asks to be connected or transferred, or when you cannot answer their question.',
-  transfer_destination: { number: '{{store_transfer_number}}' },
+  transfer_destination: { type: 'phone_number', number: '{{store_transfer_number}}' },
   transfer_option: { type: 'cold_transfer', show_transferee_as_caller: true },
   speak_during_execution: true,
   execution_message_description: 'Tell the caller you are connecting them to the store now.'
