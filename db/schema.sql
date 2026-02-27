@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS calls (
   reviewed BOOLEAN DEFAULT FALSE,
   retell_call_id VARCHAR(100),
   auto_whitelisted BOOLEAN DEFAULT FALSE,
+  transfer_completed BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -72,6 +73,9 @@ CREATE TABLE IF NOT EXISTS retell_phone_numbers (
   phone_number VARCHAR(20) NOT NULL,
   nickname VARCHAR(100),
   store_name VARCHAR(100),
+  store_address TEXT,
+  store_hours TEXT,
+  store_phone_landline VARCHAR(20),
   retell_number_id VARCHAR(100),
   created_at TIMESTAMPTZ DEFAULT NOW()
 );

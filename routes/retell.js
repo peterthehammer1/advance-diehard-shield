@@ -37,15 +37,15 @@ router.post('/retell-inbound', async (req, res) => {
       callerLabel = entry.label;
     }
 
-    // Look up the store name from our retell_phone_numbers table
+    // Look up the store details from our retell_phone_numbers table
     const storeResult = await pool.query(
-      `SELECT store_name, nickname FROM retell_phone_numbers
+      `SELECT store_name, nickname, store_address, store_hours, store_phone_landline
+       FROM retell_phone_numbers
        WHERE REPLACE(REPLACE(REPLACE(phone_number, '-', ''), '+', ''), ' ', '') = $1`,
       [toDigits(to_number)]
     );
-    const storeName = storeResult.rows.length > 0
-      ? storeResult.rows[0].store_name
-      : 'Advance Auto Parts';
+    const storeRow = storeResult.rows[0] || {};
+    const storeName = storeRow.store_name || 'Advance Auto Parts';
 
     // Pick the right agent based on caller status
     const agentResult = await pool.query(
@@ -94,7 +94,10 @@ router.post('/retell-inbound', async (req, res) => {
         dynamic_variables: {
           caller_name: callerLabel || 'Caller',
           caller_status: callerStatus,
-          store_name: storeName
+          store_name: storeName,
+          store_address: storeRow.store_address || 'Address not available',
+          store_hours: storeRow.store_hours || 'Please check our website for hours',
+          store_transfer_number: storeRow.store_phone_landline || ''
         }
       }
     };
@@ -143,10 +146,13 @@ router.post('/retell-call-ended', async (req, res) => {
       return res.json({ ok: true });
     }
 
-    // Update duration
+    // Check if this call was transferred
+    const wasTransferred = disconnection_reason === 'call_transfer';
+
+    // Update duration and transfer status
     await pool.query(
-      'UPDATE calls SET duration_seconds = $1 WHERE id = $2',
-      [durationSeconds, existingCall.id]
+      'UPDATE calls SET duration_seconds = $1, transfer_completed = $2 WHERE id = $3',
+      [durationSeconds, wasTransferred, existingCall.id]
     );
 
     // Check if this was a screening call
@@ -159,7 +165,8 @@ router.post('/retell-call-ended', async (req, res) => {
     const longEnough = (duration_ms || 0) >= 15000;
     const agentDidNotReject = disconnection_reason !== 'agent_hangup';
 
-    if (isScreeningCall && longEnough && agentDidNotReject) {
+    // Auto-whitelist if: transferred (proved human) OR engaged 15s+ without agent rejection
+    if (isScreeningCall && (wasTransferred || (longEnough && agentDidNotReject))) {
       const formattedFrom = toFormatted(from_number);
 
       // Auto-whitelist the caller

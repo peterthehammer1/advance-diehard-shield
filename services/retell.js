@@ -27,17 +27,13 @@ async function retellFetch(path, options = {}) {
 
 // --- Agents ---
 
-async function createAgent({ name, prompt, voice_id, end_call_after_silence_ms, webhook_url }) {
+async function createAgent({ name, prompt, voice_id, end_call_after_silence_ms, webhook_url, tools }) {
   // First create an LLM with the prompt
   const llm = await retellFetch('/create-retell-llm', {
     method: 'POST',
     body: JSON.stringify({
       general_prompt: prompt,
-      general_tools: end_call_after_silence_ms ? [{
-        type: 'end_call',
-        name: 'end_call',
-        description: 'End the call after delivering the message'
-      }] : []
+      general_tools: tools || []
     })
   });
 
@@ -74,6 +70,16 @@ async function deleteAgent(agentId) {
 
 async function deleteLlm(llmId) {
   return retellFetch(`/delete-retell-llm/${llmId}`, { method: 'DELETE' });
+}
+
+async function updateLlm(llmId, { prompt, tools }) {
+  return retellFetch(`/update-retell-llm/${llmId}`, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      general_prompt: prompt,
+      general_tools: tools || []
+    })
+  });
 }
 
 // --- Phone Numbers ---
@@ -132,6 +138,7 @@ module.exports = {
   listAgents,
   deleteAgent,
   deleteLlm,
+  updateLlm,
   createPhoneNumber,
   listPhoneNumbers,
   deletePhoneNumber,
