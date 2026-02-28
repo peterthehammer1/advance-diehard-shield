@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Die Hard Shield</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background: var(--color-bg);
+    }
+
+    .login-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .login-card {
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .login-card .login-logo {
+      height: 56px;
+      width: auto;
+      margin-bottom: 24px;
+      border-radius: 4px;
+    }
+
+    .login-card h2 {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin-bottom: 4px;
+    }
+
+    .login-card .login-subtitle {
+      font-size: 12px;
+      color: var(--color-text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 500;
+      margin-bottom: 32px;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .login-form input[type="password"] {
+      padding: 14px 16px;
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      text-align: center;
+      letter-spacing: 2px;
+      transition: border-color 0.2s;
+    }
+
+    .login-form input[type="password"]:focus {
+      outline: none;
+      border-color: var(--color-primary);
+    }
+
+    .login-form button {
+      padding: 14px 24px;
+      border: none;
+      border-radius: var(--radius-sm);
+      background: var(--color-primary);
+      color: var(--color-primary-text);
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: background 0.2s;
+    }
+
+    .login-form button:hover {
+      background: var(--color-primary-hover);
+    }
+
+    .login-error {
+      color: var(--color-blocked);
+      font-size: 13px;
+      font-weight: 600;
+      min-height: 20px;
+    }
+
+    @media (max-width: 480px) {
+      .login-card {
+        padding: 36px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div class="brand">
+        <img src="/AAP_Primary_HZ_RGB_Rev-Condensed.jpg" alt="Advance Auto Parts" class="brand-logo">
+        <div class="brand-text">
+          <h1>DIE HARD <span class="brand-accent">SHIELD</span></h1>
+          <span class="subtitle">Call Protection System — Advance Auto Parts</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-accent"></div>
+  </header>
+
+  <div class="login-container">
+    <div class="login-card">
+      <img src="/AAP_Primary_HZ_RGB_Rev-Condensed.jpg" alt="Advance Auto Parts" class="login-logo">
+      <h2>DIE HARD <span style="color: var(--color-primary);">SHIELD</span></h2>
+      <div class="login-subtitle">Enter password to access dashboard</div>
+      <form class="login-form" id="login-form">
+        <input type="password" id="password" placeholder="Password" required autofocus>
+        <button type="submit">Sign In</button>
+        <div class="login-error" id="login-error"></div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const password = document.getElementById('password').value;
+      const errorEl = document.getElementById('login-error');
+      errorEl.textContent = '';
+
+      try {
+        const res = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password })
+        });
+
+        if (res.ok) {
+          window.location.href = '/';
+        } else {
+          const data = await res.json();
+          errorEl.textContent = data.error || 'Invalid password';
+          document.getElementById('password').value = '';
+          document.getElementById('password').focus();
+        }
+      } catch (err) {
+        errorEl.textContent = 'Connection error. Please try again.';
+      }
+    });
+  </script>
+</body>
+</html>
